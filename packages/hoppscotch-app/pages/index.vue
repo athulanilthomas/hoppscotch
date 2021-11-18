@@ -116,7 +116,7 @@ import "splitpanes/dist/splitpanes.css"
 import { map } from "rxjs/operators"
 import { Subscription } from "rxjs"
 import isEqual from "lodash/isEqual"
-import { useSetting } from "~/newstore/settings"
+import { useSetting, applySetting } from "~/newstore/settings"
 import {
   restRequest$,
   restActiveParamsCount$,
@@ -260,6 +260,14 @@ function setupRequestSync(
   })
 }
 
+function setupEmbedMode() {
+  const { route } = useContext()
+
+  if (route.value.query.embed === "true") {
+    applySetting("EMBED_MODE", true)
+  }
+}
+
 export default defineComponent({
   components: { Splitpanes, Pane },
   setup() {
@@ -273,6 +281,8 @@ export default defineComponent({
 
     setupRequestSync(confirmSync, requestForSync)
     bindRequestToURLParams()
+
+    setupEmbedMode()
 
     return {
       windowInnerWidth: useWindowSize(),
@@ -294,7 +304,7 @@ export default defineComponent({
         ),
         null
       ),
-      SIDEBAR: useSetting("SIDEBAR"),
+      SIDEBAR: useSetting("ENABLE_SIDEBAR") && !useSetting("EMBED_MODE"),
       COLUMN_LAYOUT: useSetting("COLUMN_LAYOUT"),
       SIDEBAR_ON_LEFT: useSetting("SIDEBAR_ON_LEFT"),
       confirmSync,

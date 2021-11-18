@@ -50,6 +50,7 @@ export type SettingsType = {
   SIDEBAR: boolean
   SIDEBAR_ON_LEFT: boolean
   ZEN_MODE: boolean
+  EMBED_MODE: boolean
   FONT_SIZE: HoppFontSize
   COLUMN_LAYOUT: boolean
 }
@@ -75,6 +76,7 @@ export const defaultSettings: SettingsType = {
   EXPAND_NAVIGATION: true,
   SIDEBAR: true,
   SIDEBAR_ON_LEFT: false,
+  EMBED_MODE: false,
   ZEN_MODE: false,
   FONT_SIZE: "small",
   COLUMN_LAYOUT: true,

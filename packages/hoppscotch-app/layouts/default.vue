@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen w-screen">
     <Splitpanes class="no-splitter" :dbl-click-splitter="false" horizontal>
-      <Pane v-if="!ZEN_MODE" style="height: auto">
+      <Pane v-if="!hideWidgets" style="height: auto">
         <AppHeader />
       </Pane>
       <Pane class="flex flex-1 hide-scrollbar !overflow-auto">
@@ -11,6 +11,7 @@
           :horizontal="!(windowInnerWidth.x.value >= 768)"
         >
           <Pane
+            v-if="!EMBED_MODE"
             style="width: auto; height: auto"
             class="hide-scrollbar !overflow-auto"
           >
@@ -140,10 +141,16 @@ export default defineComponent({
     return {
       windowInnerWidth: useWindowSize(),
       ZEN_MODE: useSetting("ZEN_MODE"),
+      EMBED_MODE: useSetting("EMBED_MODE"),
     }
   },
   head() {
     return this.$nuxtI18nHead({ addSeoAttributes: true })
+  },
+  computed: {
+    hideWidgets() {
+      return this.ZEN_MODE || this.EMBED_MODE
+    },
   },
   watch: {
     $route(to) {
