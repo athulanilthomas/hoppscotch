@@ -116,7 +116,7 @@ import "splitpanes/dist/splitpanes.css"
 import { map } from "rxjs/operators"
 import { Subscription } from "rxjs"
 import isEqual from "lodash/isEqual"
-import { useSetting } from "~/newstore/settings"
+import { useSetting, bulkApplySettings } from "~/newstore/settings"
 import {
   restRequest$,
   restActiveParamsCount$,
@@ -207,6 +207,11 @@ function bindRequestToURLParams() {
   })
 }
 
+function isUserSpecificMode() {
+  const { route } = useContext()
+  return !!route.value.query.userID
+}
+
 function oAuthURL() {
   const auth = useStream(
     restAuth$,
@@ -224,6 +229,33 @@ function oAuthURL() {
       }
     }
   })
+}
+
+function applyUserSettings() {
+  // const userID = 'NyyAV1YpqjWfiZX4KxgiW5wpZ3o1'
+  const { route } = useContext()
+  const { userID, endpointID } = route.value.query
+
+  if (userID && endpointID) {
+    bulkApplySettings({
+      EMBED_MODE: !!(route.value.query.embed === "true"),
+      userID,
+      endpointID,
+    })
+  }
+}
+
+function disableSync() {
+  bulkApplySettings({
+    syncCollections: false,
+    syncEnvironments: false,
+    syncHistory: false,
+  })
+}
+
+function loadUserSpecificSettings() {
+  disableSync()
+  applyUserSettings()
 }
 
 function setupRequestSync(
@@ -272,7 +304,10 @@ export default defineComponent({
     }
 
     setupRequestSync(confirmSync, requestForSync)
-    bindRequestToURLParams()
+    // Load user specific settings on userID
+    ;(isUserSpecificMode()
+      ? loadUserSpecificSettings
+      : bindRequestToURLParams)()
 
     return {
       windowInnerWidth: useWindowSize(),

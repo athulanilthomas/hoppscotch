@@ -6,6 +6,10 @@ import { initEnvironments } from "./environments"
 import { initHistory } from "./history"
 import { initSettings } from "./settings"
 
+import { settingsStore } from "~/newstore/settings"
+
+import { initEmbedUserItems } from "~/helpers/fb/embeds"
+
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
@@ -24,12 +28,16 @@ export function initializeFirebase() {
     try {
       initializeApp(firebaseConfig)
 
-      initAuth()
-      initSettings()
-      initCollections()
-      initHistory()
-      initEnvironments()
-      initAnalytics()
+      if (settingsStore.value.userID) {
+        initEmbedUserItems(settingsStore.value.userID)
+      } else {
+        initAuth()
+        initSettings()
+        initCollections()
+        initHistory()
+        initEnvironments()
+        initAnalytics()
+      }
 
       initialized = true
     } catch (e) {

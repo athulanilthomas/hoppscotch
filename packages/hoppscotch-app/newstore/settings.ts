@@ -33,6 +33,12 @@ export type SettingsType = {
   syncHistory: boolean
   syncEnvironments: boolean
 
+  EMBED_MODE: boolean
+
+  userID: string | null
+  endpointID: string | null
+  endpointSecret: string | null
+
   PROXY_ENABLED: boolean
   PROXY_URL: string
   EXTENSIONS_ENABLED: boolean
@@ -58,6 +64,12 @@ export const defaultSettings: SettingsType = {
   syncCollections: true,
   syncHistory: true,
   syncEnvironments: true,
+
+  EMBED_MODE: false,
+
+  userID: null,
+  endpointID: null,
+  endpointSecret: null,
 
   PROXY_ENABLED: false,
   PROXY_URL: "https://proxy.hoppscotch.io/",
