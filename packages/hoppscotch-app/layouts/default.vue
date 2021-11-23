@@ -151,7 +151,9 @@ export default defineComponent({
     },
   },
   beforeMount() {
-    setupLocalPersistence()
+    const USER_SPECIFIC_MODE = useSetting("USER_SPECIFIC_MODE")
+
+    if (!USER_SPECIFIC_MODE.value) setupLocalPersistence()
 
     registerApolloAuthUpdate()
   },

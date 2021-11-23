@@ -126,7 +126,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "@nuxtjs/composition-api"
+import { computed, defineComponent, onMounted } from "@nuxtjs/composition-api"
 import { useReadonlyStream, useStream } from "~/helpers/utils/composables"
 import {
   environments$,
@@ -144,8 +144,20 @@ export default defineComponent({
       variables: globalEnv.value,
     }))
 
+    const environments = useReadonlyStream(environments$, [])
+
+    onMounted((): void => {
+      const doesUserSpecificENVSExists = !!(
+        Array.isArray(environments.value) ? environments.value : []
+      )?.length
+
+      if (doesUserSpecificENVSExists) {
+        setCurrentEnvironment(0)
+      }
+    })
+
     return {
-      environments: useReadonlyStream(environments$, []),
+      environments,
       globalEnvironment,
       selectedEnvironmentIndex: useStream(
         selectedEnvIndex$,
