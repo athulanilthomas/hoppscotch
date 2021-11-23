@@ -1,11 +1,10 @@
 import { collection, getFirestore, onSnapshot } from "firebase/firestore"
-
 import {
   setRESTCollections,
   translateToNewRESTCollection,
 } from "~/newstore/collections"
-
 import { replaceEnvironments } from "~/newstore/environments"
+import { settingsStore } from "~/newstore/settings"
 
 type userID = string
 
@@ -48,8 +47,9 @@ function initEmbeddedEnvironments(userID: userID): void {
   )
 }
 
-export function initEmbedUserItems(userID: userID): void {
-  if (!userID) return
+export function initEmbedUserItems(): void {
+  const userID = settingsStore.value.userID
+
   initEmbeddedCollections(userID)
   initEmbeddedEnvironments(userID)
 }

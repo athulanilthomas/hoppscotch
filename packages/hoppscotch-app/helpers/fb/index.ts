@@ -5,9 +5,6 @@ import { initCollections } from "./collections"
 import { initEnvironments } from "./environments"
 import { initHistory } from "./history"
 import { initSettings } from "./settings"
-
-import { settingsStore } from "~/newstore/settings"
-
 import { initEmbedUserItems } from "~/helpers/fb/embeds"
 
 const firebaseConfig = {
@@ -23,13 +20,13 @@ const firebaseConfig = {
 
 let initialized = false
 
-export function initializeFirebase() {
+export function initializeFirebase(IS_USER_SPECIFIC_MODE: boolean = false) {
   if (!initialized) {
     try {
       initializeApp(firebaseConfig)
 
-      if (settingsStore.value.userID) {
-        initEmbedUserItems(settingsStore.value.userID)
+      if (IS_USER_SPECIFIC_MODE) {
+        initEmbedUserItems()
       } else {
         initAuth()
         initSettings()

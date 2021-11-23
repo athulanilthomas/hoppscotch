@@ -35,9 +35,10 @@ export type SettingsType = {
 
   EMBED_MODE: boolean
 
-  userID: string | null
-  endpointID: string | null
-  endpointSecret: string | null
+  userID: string
+  endpointID: string
+  endpointSecret: string
+  USER_SPECIFIC_MODE: boolean
 
   PROXY_ENABLED: boolean
   PROXY_URL: string
@@ -67,9 +68,10 @@ export const defaultSettings: SettingsType = {
 
   EMBED_MODE: false,
 
-  userID: null,
-  endpointID: null,
-  endpointSecret: null,
+  userID: "",
+  endpointID: "",
+  endpointSecret: "",
+  USER_SPECIFIC_MODE: false,
 
   PROXY_ENABLED: false,
   PROXY_URL: "https://proxy.hoppscotch.io/",
